@@ -1,39 +1,29 @@
-create table Groups(
-Id int primary key identity(1,1) not null,
-GroupName nvarchar(20),
-)
-
-
-create table Students(
-Id int primary key identity(1,1) not null,
-FirstName nvarchar(20),
-Surname nvarchar(30),
-Patronomic nvarchar(30) null,
---DateOfBirth datetime,
-GroupId int not null references Groups(Id)
-)
-
-insert into Groups values ('P81'), ('P91')
-insert into Students(FirstName, Surname, DateOfBirth, GroupId) values('John','Program', '2006-04-30', 2),('Dima','Exter','1995-01-10',2)
-select * from Students
-select S.FirstName+' '+S.Surname Fullname, G.GroupName from Students S, Groups G
-where S.GroupId=G.Id
-delete from Students
-select * from Students
-drop table Groups
 create database Hospital
 use Hospital
-create table Doctors(
-Id int, 
-Firstname nvarchar(20) not null,
-Surname nvarchar(30) not null,
-Age int CHECK(Age>18),
-Email nvarchar(50)unique check(Email!=''),
-primary key(Id),
-CHECK(Surname<>Firstname)
+create table Departments(
+Id int primary key identity(1,1) not null,
+Building int  not null check(Building>1 and Building<5),
+Financing money not null check(Financing!<0) default 0,
+[Name] nvarchar(30) unique not null check([Name]!='') 
+) 
+
+create table Diseases(
+Id int primary key identity(1,1) not null,
+[Name] nvarchar(100) unique not null check([Name]!='') ,
+Severity int not null check(Severity!<1) default 0
 )
---drop table Doctors
-insert into Doctors(Firstname,Surname,Email),
-
-
-
+create table Doctors(
+Id int primary key identity(1,1) not null,
+[Name] nvarchar(max) not null check([Name]!=''),
+Phone char(10) not null,
+Salary money not null check(Salary!=0),
+Surname nvarchar(max) not null check(Surname!='')
+)
+create table Examinations(
+Id int primary key identity(1,1) not null,
+[DayOfWeek] int not null check([DayOfWeek]>=1 and [DayOfWeek]<=7),
+StartTime time check(StartTime>='8:00' and StartTime<='18:00') not null,
+EndTime time not null,
+[Name] nvarchar(100) unique check([Name]!='') not null,
+check(EndTime>StartTime)
+)
